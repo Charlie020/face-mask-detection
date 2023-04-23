@@ -435,18 +435,20 @@ def parse_opt(known=False):
     print(torch.__version__)
     print(torch.cuda.is_available())
     parser = argparse.ArgumentParser()
-    parser.add_argument('--weights', type=str, default='yolov5s.pt', help='initial weights path')
-    parser.add_argument('--cfg', type=str, default='models/yolov5s_ghostnet.yaml', help='model.yaml path')
-    parser.add_argument('--data', type=str, default='data/mask.yaml', help='dataset.yaml path')
+    parser.add_argument('--weights', type=str, default='yolov5s.pt', help='initial weights path')            # 预训练权重
+    parser.add_argument('--cfg', type=str, default='models/yolov5s_CBAM.yaml', help='model.yaml path')   # 模型的网络结果
+    parser.add_argument('--data', type=str, default='data/mask.yaml', help='dataset.yaml path')              # 数据集配置
 
     parser.add_argument('--hyp', type=str, default='data/hyps/hyp.scratch.yaml', help='hyperparameters path')
 
-    parser.add_argument('--epochs', type=int, default=200)
-    parser.add_argument('--batch-size', type=int, default=16, help='total batch size for all GPUs')
+    parser.add_argument('--epochs', type=int, default=200)                                                   # 训练epoch个数
+    parser.add_argument('--batch-size', type=int, default=16, help='total batch size for all GPUs')          # 图片抓取数量
 
     parser.add_argument('--imgsz', '--img', '--img-size', type=int, default=640, help='train, val image size (pixels)')
     parser.add_argument('--rect', action='store_true', help='rectangular training')
-    parser.add_argument('--resume', nargs='?', const=True, default=False, help='resume most recent training')
+
+    parser.add_argument('--resume', nargs='?', const=True, default=False, help='resume most recent training')   # 是否继续上一次的训练，默认False
+
     parser.add_argument('--nosave', action='store_true', help='only save final checkpoint')
     parser.add_argument('--noval', action='store_true', help='only validate final epoch')
     parser.add_argument('--noautoanchor', action='store_true', help='disable autoanchor check')
@@ -455,7 +457,7 @@ def parse_opt(known=False):
     parser.add_argument('--cache', type=str, nargs='?', const='ram', help='--cache images in "ram" (default) or "disk"')
     parser.add_argument('--image-weights', action='store_true', help='use weighted image selection for training')
 
-    parser.add_argument('--device', default='1', help='cuda device, i.e. 0 or 0,1,2,3 or cpu')
+    parser.add_argument('--device', default='1', help='cuda device, i.e. 0 or 0,1,2,3 or cpu')                # 不填默认cpu训练，其他为gpu训练
 
     parser.add_argument('--multi-scale', action='store_true', help='vary img-size +/- 50%%')
     parser.add_argument('--single-cls', action='store_true', help='train multi-class data as single-class')
@@ -468,7 +470,7 @@ def parse_opt(known=False):
     parser.add_argument('--quad', action='store_true', help='quad dataloader')
     parser.add_argument('--linear-lr', action='store_true', help='linear LR')
     parser.add_argument('--label-smoothing', type=float, default=0.0, help='Label smoothing epsilon')
-    parser.add_argument('--patience', type=int, default=100, help='EarlyStopping patience (epochs without improvement)')
+    parser.add_argument('--patience', type=int, default=100, help='EarlyStopping patience (epochs without improvement)')   # EarlyStopping epochs数量
     parser.add_argument('--freeze', type=int, default=0, help='Number of layers to freeze. backbone=10, all=24')
     parser.add_argument('--save-period', type=int, default=-1, help='Save checkpoint every x epochs (disabled if < 1)')
     parser.add_argument('--local_rank', type=int, default=-1, help='DDP parameter, do not modify')
