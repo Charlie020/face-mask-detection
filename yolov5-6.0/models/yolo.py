@@ -284,8 +284,30 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
             c2 = ch[f] * args[0] ** 2
         elif m is Expand:
             c2 = ch[f] // args[0] ** 2
+        elif m is HorBlock:
+            c1, c2 = ch[f], args[0]
+            if c2 != no:
+                c2 = make_divisible(c2 * gw, 8)
+
+            args = [c1, c2, *args[1:]]
+            if m is HorBlock:
+                args.insert(2, n)
+                n = 1
+        elif m is HorNet:
+            c2 = args[0]
+            args = args[1:]
+        elif m is C3HB:
+            c1, c2 = ch[f], args[0]
+            if c2 != no:
+                c2 = make_divisible(c2 * gw, 8)
+
+            args = [c1, c2, *args[1:]]
+            if m is C3HB:
+                args.insert(2, n)
+                n = 1
         else:
             c2 = ch[f]
+
 
         m_ = nn.Sequential(*[m(*args) for _ in range(n)]) if n > 1 else m(*args)  # module
         t = str(m)[8:-2].replace('__main__.', '')  # module type
