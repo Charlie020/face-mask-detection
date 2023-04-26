@@ -49,6 +49,8 @@ from utils.loggers.wandb.wandb_utils import check_wandb_resume
 from utils.metrics import fitness
 from utils.loggers import Loggers
 from utils.callbacks import Callbacks
+from models.common import BiFPN_Concat2
+from models.common import BiFPN_Concat3
 
 LOGGER = logging.getLogger(__name__)
 LOCAL_RANK = int(os.getenv('LOCAL_RANK', -1))  # https://pytorch.org/docs/stable/elastic/run.html
@@ -145,6 +147,11 @@ def train(hyp,  # path/to/hyp.yaml or hyp dictionary
             g0.append(v.weight)
         elif hasattr(v, 'weight') and isinstance(v.weight, nn.Parameter):  # weight (with decay)
             g1.append(v.weight)
+        # BiFPN_Concat
+        elif isinstance(v, BiFPN_Concat2) and hasattr(v, 'w') and isinstance(v.w, nn.Parameter):
+            g1.append(v.w)
+        elif isinstance(v, BiFPN_Concat3) and hasattr(v, 'w') and isinstance(v.w, nn.Parameter):
+            g1.append(v.w)
 
     if opt.adam:
         optimizer = Adam(g0, lr=hyp['lr0'], betas=(hyp['momentum'], 0.999))  # adjust beta1 to momentum
@@ -436,7 +443,7 @@ def parse_opt(known=False):
     print(torch.cuda.is_available())
     parser = argparse.ArgumentParser()
     parser.add_argument('--weights', type=str, default='yolov5s.pt', help='initial weights path')            # 预训练权重
-    parser.add_argument('--cfg', type=str, default='models/yolov5s_SmallTarget.yaml', help='model.yaml path')   # 模型的网络结构
+    parser.add_argument('--cfg', type=str, default='models/yolov5s_BiFPN.yaml', help='model.yaml path')   # 模型的网络结构
     parser.add_argument('--data', type=str, default='data/mask.yaml', help='dataset.yaml path')              # 数据集配置
 
     parser.add_argument('--hyp', type=str, default='data/hyps/hyp.scratch.yaml', help='hyperparameters path')

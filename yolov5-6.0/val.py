@@ -311,7 +311,7 @@ def parse_opt():
     parser.add_argument('--conf-thres', type=float, default=0.25, help='confidence threshold')  # 0.001
     parser.add_argument('--iou-thres', type=float, default=0.45, help='NMS IoU threshold')   # 0.6
 
-    parser.add_argument('--task', default='val', help='train, val, test, speed or study')
+    parser.add_argument('--task', default='test', help='train, val, test, speed or study')
 
     parser.add_argument('--device', default='1', help='cuda device, i.e. 0 or 0,1,2,3 or cpu')
 
