@@ -303,7 +303,7 @@ def parse_opt():
     parser = argparse.ArgumentParser()
     #  python val.py --weights runs/train/exp/weights/best.pt --data mask.yaml --img 640 --conf 0.25 --iou 0.45 --half --task test
     parser.add_argument('--data', type=str, default='data/mask.yaml', help='dataset.yaml path')
-    parser.add_argument('--weights', nargs='+', type=str, default='runs/train/Baseline/weights/best.pt', help='model.pt path(s)')
+    parser.add_argument('--weights', nargs='+', type=str, default='runs/train/Baseline+CA/weights/best.pt', help='model.pt path(s)')
     parser.add_argument('--batch-size', type=int, default=16, help='batch size')
 
     parser.add_argument('--imgsz', '--img', '--img-size', type=int, default=640, help='inference size (pixels)')
