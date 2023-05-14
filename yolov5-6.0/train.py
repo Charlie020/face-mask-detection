@@ -443,7 +443,7 @@ def parse_opt(known=False):
     print(torch.cuda.is_available())
     parser = argparse.ArgumentParser()
     parser.add_argument('--weights', type=str, default='yolov5s.pt', help='initial weights path')            # 预训练权重
-    parser.add_argument('--cfg', type=str, default='models/yolov5s_SmallTarget.yaml', help='model.yaml path')   # 模型的网络结构
+    parser.add_argument('--cfg', type=str, default='models/yolov5s_SmallTarget+C3HB_head.yaml', help='model.yaml path')   # 模型的网络结构
     parser.add_argument('--data', type=str, default='data/mask.yaml', help='dataset.yaml path')              # 数据集配置
 
     parser.add_argument('--hyp', type=str, default='data/hyps/hyp.scratch.yaml', help='hyperparameters path')  # 在data/hyps/hyp.scratch.yaml里面调超参
