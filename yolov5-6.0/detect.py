@@ -268,7 +268,7 @@ def parse_opt():
     print(torch.__version__)
     print(torch.cuda.is_available())
     parser = argparse.ArgumentParser()
-    parser.add_argument('--weights', nargs='+', type=str, default='runs/train/Baseline+SIOU+CBAMC3/weights/best.pt', help='model path(s)')
+    parser.add_argument('--weights', nargs='+', type=str, default='runs/train/Baseline+SIOU/weights/best.pt', help='model path(s)')
     parser.add_argument('--source', type=str, default='VOCdevkit/images/test', help='file/dir/URL/glob, 0 for webcam')
 
     parser.add_argument('--imgsz', '--img', '--img-size', nargs='+', type=int, default=[640], help='inference size h,w')
