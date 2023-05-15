@@ -1348,3 +1348,39 @@ class ODConv2d(nn.Module):
     def forward(self, x):
         return self._forward_impl(x)
 #---------------------ODConv end--------------------
+
+
+
+#--------------------ECA注意力机制------------------------
+class ECA(nn.Module):
+    """Constructs a ECA module.
+    Args:
+        channel: Number of channels of the input feature map
+        k_size: Adaptive selection of kernel size
+    """
+
+    def __init__(self, c1, c2, k_size=3):
+        super(ECA, self).__init__()
+        self.avg_pool = nn.AdaptiveAvgPool2d(1)
+        self.conv = nn.Conv1d(1, 1, kernel_size=k_size, padding=(k_size - 1) // 2, bias=False)
+        self.sigmoid = nn.Sigmoid()
+
+    def forward(self, x):
+        # feature descriptor on the global spatial information
+        y = self.avg_pool(x)
+
+        # print(y.shape,y.squeeze(-1).shape,y.squeeze(-1).transpose(-1, -2).shape)
+        # Two different branches of ECA module
+        # 50*C*1*1
+        # 50*C*1
+        # 50*1*C
+        y = self.conv(y.squeeze(-1).transpose(-1, -2)).transpose(-1, -2).unsqueeze(-1)
+
+        # Multi-scale information fusion
+        y = self.sigmoid(y)
+
+        return x * y.expand_as(x)
+
+#--------------------ECA DONE------------------------
+
+
