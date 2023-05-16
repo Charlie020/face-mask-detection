@@ -443,12 +443,12 @@ def parse_opt(known=False):
     print(torch.cuda.is_available())
     parser = argparse.ArgumentParser()
     parser.add_argument('--weights', type=str, default='yolov5s.pt', help='initial weights path')            # 预训练权重
-    parser.add_argument('--cfg', type=str, default='models/yolov5s_SmallTarget+C3HB_backbone.yaml', help='model.yaml path')   # 模型的网络结构
+    parser.add_argument('--cfg', type=str, default='models/yolov5s_SmallTarget+CA2.yaml', help='model.yaml path')   # 模型的网络结构
     parser.add_argument('--data', type=str, default='data/mask.yaml', help='dataset.yaml path')              # 数据集配置
 
     parser.add_argument('--hyp', type=str, default='data/hyps/hyp.scratch.yaml', help='hyperparameters path')  # 在data/hyps/hyp.scratch.yaml里面调超参
 
-    parser.add_argument('--epochs', type=int, default=200)                                                   # 训练epoch个数
+    parser.add_argument('--epochs', type=int, default=2)                                                   # 训练epoch个数
     parser.add_argument('--batch-size', type=int, default=16, help='total batch size for all GPUs')          # 图片抓取数量
 
     parser.add_argument('--imgsz', '--img', '--img-size', type=int, default=640, help='train, val image size (pixels)')
