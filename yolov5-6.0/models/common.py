@@ -470,12 +470,6 @@ class Classify(nn.Module):
         return self.flat(self.conv(z))  # flatten to x(b,c2)
 
 
-
-# ------------------- CA ---------------
-
-# ------------------- CA DONE-----------
-
-
 # ------------------- SE ---------------
 class SE(nn.Module):
     def __init__(self, c1, c2, ratio=16):
