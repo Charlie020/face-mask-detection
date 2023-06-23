@@ -10,16 +10,20 @@
 # Train/val/test sets as 1) dir: path/to/imgs, 2) file: path/to/imgs.txt, or 3) list: [path/to/imgs1, path/to/imgs2, ..]
 #path: VOCdevkit
 path: VOCdevkit
-train: # train images (relative to 'path')  4772 images
-  - images/train
-val: # val images (relative to 'path')  1585 images
-  - images/val
-test: # test images (optional)  1594 images
-  - images/test
+train: # train images (relative to 'path')
+  # - images/train       #  4772 images
+  - train.txt            #  1959 images
+val: # val images (relative to 'path')
+  # - images/val         #  1585 images
+  - val.txt              #  654  images
+test: # test images (optional)
+  # - images/test        #  1594 images
+  - test.txt             #  654  images
 
 # Classes
 nc: 2  # number of classes
-names: ['no-mask', 'mask']  # class names
+# names: ['no-mask', 'mask']  # class names
+names: ['nomask', 'mask']  # class names
 
 
 # Download script/URL (optional) ---------------------------------------------------------------------------------------
