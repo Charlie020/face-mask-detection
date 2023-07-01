@@ -11,14 +11,14 @@
 #path: VOCdevkit
 path: VOCdevkit
 train: # train images (relative to 'path')
-  # - images/train       #  4772 images
-  - train.txt            #  1932 images
+  - images/train       #  4772 images
+  #- train.txt            #  1932 images
 val: # val images (relative to 'path')
-  # - images/val         #  1585 images
-  - val.txt              #  644  images
+  - images/val         #  1585 images
+  #- val.txt              #  644  images
 test: # test images (optional)
-  # - images/test        #  1594 images
-  - test.txt             #  644  images
+  - images/test        #  1594 images
+  #- test.txt             #  644  images
 
 # Classes
 nc: 2  # number of classes
