@@ -2038,5 +2038,83 @@ class SwinV2_CSPB(nn.Module):
 #--------------------------swintransformer v2 end-------------------------
 
 
+#--------------------------- yolo-z start ------------------------------
+# ResneXt50
+class GroupConv2D(nn.Module):
+    def __init__(self, c1, c2, k=1, s=1, p=None, g=1, act=True):  # ch_in, ch_out, shortcut, groups, expansion
+        super().__init__()
+        self.conv = Conv(c1, c2, 3, s, autopad(k, p), g=g)
+        # self.c1 = nn.Conv2d(c1, c2, 3, s ,autopad(k, p),groups=g,bias = False)
 
+    def forward(self, x):
+        return self.conv(x)
+
+class RenextBottleNeckBlock(nn.Module):
+    def __init__(self, c1, c2, g=1):
+        super().__init__()
+        # _c = int(c2//2 )
+        self.conv1 = Conv(c1, c2, k=1, s=1, g=1)
+        self.group = GroupConv2D(c2, c2, k=3, s=1, g=g)
+        self.conv2 = Conv(c2, c2, k=1, s=1, g=1)
+        # self.shortcut = Conv(c1, c2, k = 1, s = s, g = 1)
+
+    def forward(self, x):
+        x = self.conv1(x)
+        return x + self.conv2(self.group(x))
+
+class ResnextBlock(nn.Module):
+    def __init__(self, c1, c2, n=1, s=1, g=1, act=True):
+        super().__init__()
+        self.resnext = nn.Sequential(*(RenextBottleNeckBlock(c1, c2, s=s, g=g, act=True) for _ in range(n)))
+
+    def forward(self, x):
+        return self.resnext(x)
+
+# CSPResneXt50
+class ResneXtBottleneckCSP(nn.Module):
+    def __init__(self, c1, c2, n=1, g=1, e=0.5):  # ch_in, ch_out, number, shortcut, groups, expansion
+        super().__init__()
+        c_ = int(c2 * e)  # hidden channels
+        self.cv1 = Conv(c1, c_, 1, 1)
+        self.cv2 = Conv(c1, c_, 1, 1)
+        self.cv3 = Conv(2 * c_, c2, 1)  # act=FReLU(c2)
+        self.m = nn.Sequential(*(RenextBottleNeckBlock(c_, c_, g) for _ in range(n)))
+        # self.m = nn.Sequential(*[CrossConv(c_, c_, 3, 1, g, 1.0, shortcut) for _ in range(n)])
+
+    def forward(self, x):
+        return self.cv3(torch.cat((self.m(self.cv1(x)), self.cv2(x)), dim=1))
+
+# DenseNet
+class BasicBlock(nn.Module):
+    def __init__(self, in_planes, out_planes):
+        super().__init__()
+        self.bn1 = nn.BatchNorm2d(in_planes)
+        self.silu = nn.SiLU()
+        self.conv1 = nn.Conv2d(in_planes, out_planes, kernel_size=3, stride=1, padding=1, bias=False)
+
+    def forward(self, x):
+        out = self.conv1(self.silu(self.bn1(x)))
+        return torch.cat([x, out], 1)
+
+class DenseBlock(nn.Module):
+    def __init__(self, c1, c2, n, growth_rate, e=0.5):
+        super().__init__()
+        c_ = int(c2 * e)  # hidden channels
+        self.cv1 = Conv(c1, c_, 1, 1)
+        self.cv2 = Conv(c1, c_, 1, 1)
+        incv3 = c_ + growth_rate * (n - 1) + growth_rate + c_
+        self.cv3 = Conv(incv3, c2, 1)  # act=FReLU(c2)
+        self.layer = self._make_layer(c_, growth_rate, n)
+
+    def _make_layer(self, in_planes, growth_rate, n):
+        layers = []
+        for i in range(n):
+            layers.append(BasicBlock(in_planes + i * growth_rate, growth_rate))
+        return nn.Sequential(*layers)
+
+    def forward(self, x):
+        # return self.layer(x)
+        return self.cv3(torch.cat((self.layer(self.cv1(x)), self.cv2(x)), dim=1))
+        # return torch.cat((self.layer(self.cv1(x)), self.cv2(x)), dim=1)
+#-------------------------Done------------------------------
 
