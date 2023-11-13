@@ -301,9 +301,9 @@ def parse_opt():
     print(torch.__version__)
     print(torch.cuda.is_available())
     parser = argparse.ArgumentParser()
-    #  python val.py --weights runs/train/exp2/weights/best.pt --data mask.yaml --img 640 --conf 0.25 --iou 0.45 --half --task test
+    #  python val.py --weights runs/train/Baseline+SIOU+SmallTarget+DRConv2d+C2f+CBAM_2_newset/weights/best.pt --data mask.yaml --img 640 --conf 0.25 --iou 0.45 --half --task test
     parser.add_argument('--data', type=str, default='data/mask.yaml', help='dataset.yaml path')
-    parser.add_argument('--weights', nargs='+', type=str, default='runs/train/Baseline+CA/weights/best.pt', help='model.pt path(s)')
+    parser.add_argument('--weights', nargs='+', type=str, default='runs/train/Baseline+SIOU+SmallTarget+CA/weights/best.pt', help='model.pt path(s)')
     parser.add_argument('--batch-size', type=int, default=16, help='batch size')
 
     parser.add_argument('--imgsz', '--img', '--img-size', type=int, default=640, help='inference size (pixels)')

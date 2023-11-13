@@ -443,10 +443,10 @@ def parse_opt(known=False):
     print(torch.cuda.is_available())
     parser = argparse.ArgumentParser()
     parser.add_argument('--weights', type=str, default='yolov5s.pt', help='initial weights path')            # 预训练权重
-    parser.add_argument('--cfg', type=str, default='models/yolov5s_SmallTarget+Swintransformer.yaml', help='model.yaml path')   # 模型的网络结构
+    parser.add_argument('--cfg', type=str, default='models/yolov5s_SmallTarget_DRConv2d_C2f_CBAM_2.yaml', help='model.yaml path')   # 模型的网络结构
     parser.add_argument('--data', type=str, default='data/mask.yaml', help='dataset.yaml path')              # 数据集配置
 
-    parser.add_argument('--hyp', type=str, default='data/hyps/hyp.scratch.yaml', help='hyperparameters path')  # 在data/hyps/hyp.scratch.yaml里面调超参
+    parser.add_argument('--hyp', type=str, default='data/hyps/hyp.scratch-low.yaml', help='hyperparameters path')  # 在data/hyps/hyp.scratch-low.yaml里面调超参
 
     parser.add_argument('--epochs', type=int, default=200)                                                   # 训练epoch个数
     parser.add_argument('--batch-size', type=int, default=16, help='total batch size for all GPUs')          # 图片抓取数量
@@ -454,7 +454,7 @@ def parse_opt(known=False):
     parser.add_argument('--imgsz', '--img', '--img-size', type=int, default=640, help='train, val image size (pixels)')
     parser.add_argument('--rect', action='store_true', help='rectangular training')
 
-    parser.add_argument('--resume', nargs='?', const=True, default=False, help='resume most recent training')   # 是否继续上一次的训练，默认False
+    parser.add_argument('--resume', nargs='?', const=True, default=False, help='resume most recent training')   # 是否继续上一次的训练，默认default=False
 
     parser.add_argument('--nosave', action='store_true', help='only save final checkpoint')
     parser.add_argument('--noval', action='store_true', help='only validate final epoch')
@@ -470,7 +470,7 @@ def parse_opt(known=False):
     parser.add_argument('--single-cls', action='store_true', help='train multi-class data as single-class')
     parser.add_argument('--adam', action='store_true', help='use torch.optim.Adam() optimizer')
     parser.add_argument('--sync-bn', action='store_true', help='use SyncBatchNorm, only available in DDP mode')
-    parser.add_argument('--workers', type=int, default=4, help='maximum number of dataloader workers')
+    parser.add_argument('--workers', type=int, default=6, help='maximum number of dataloader workers')
     parser.add_argument('--project', default=ROOT / 'runs/train', help='save to project/name')
     parser.add_argument('--name', default='exp', help='save to project/name')
     parser.add_argument('--exist-ok', action='store_true', help='existing project/name ok, do not increment')
